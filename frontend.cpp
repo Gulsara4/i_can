@@ -66,6 +66,6 @@ void print_field(State* st) {
   }
 
   wrefresh(win1);
-  timeout(1000);
+  
   delwin(win1);
 }
