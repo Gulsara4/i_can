@@ -12,10 +12,10 @@ extern GameInfo_t currentGameState;
 extern State currentMachineState; 
 
 
-void print_field();
+void print_field(State* st);
 void resetField();
 void resetDynamicField(int a);
-void printWelcome(State* st);
+
 struct Cell {
     int x;
     int y;

@@ -46,10 +46,8 @@ void initialization(){
   fillField(snake, app);
   info->score=snake.get_length_of_snake();
   info->speed = 0;
-  print_field();
-  st=new State(State_move);
 }
-///int delay = 1000 - info->speed;
+
 
 
 void userInput(UserAction_t action, bool hold){
@@ -57,39 +55,37 @@ void userInput(UserAction_t action, bool hold){
 
     if (action==Pause){
       *st=(State_pause);
-       printWelcome(st);
+        
     }
     else if(action==Terminate){     
       *st=(State_terminate);
       resetDynamicField(1);
-      printWelcome(st);
+       
        
     }
     else if( action==Start){
       *st=(State_start);
       initialization();
-      printWelcome(st);
-     
-      
+
       
     }
     else if (action==Up || action==Down || action==Left || action==Right)
     {
       *st=(State_move);
       processSnakeMove(action);
-      print_field();
-      refresh();
-      
+  
     }
-    // else if(action==ERR){
-    //   Snake &my = getSnake();
-    //   int previousDirection = getDirectionBetweenVectors(my.body[0], my.body[1]);
-    //   if (previousDirection==0){action=Up;}
-    //   else if(previousDirection==1){action=Down;}
-    //   else if(previousDirection==2){action=Left;}
-    //   else if(previousDirection==3){action=Right;}
-    //   processSnakeMove(action);
+    else if(action==ERR){
+      Snake &my = getSnake();
+      int previousDirection = getDirectionBetweenVectors(my.body[0], my.body[1]);
+      if (previousDirection==0){action=Up;}
+      else if(previousDirection==1){action=Down;}
+      else if(previousDirection==2){action=Left;}
+      else if(previousDirection==3){action=Right;}
+      processSnakeMove(action);
+      
       
      
-    // }
+    }
+    
 }  

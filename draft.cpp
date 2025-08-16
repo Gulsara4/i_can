@@ -1,30 +1,5 @@
 #include "common_structure.h"
 #include "snake_apple.h"
-// Глобальные указатели на окна
-
-#ifdef RUN1
-void print_field() {
-  GameInfo_t* info = updateCurrentState();
-  for (int i = 0; i < height1; i++) {
-    std::cout << i << " ";
-    if (i < 10) {
-      std::cout << " ";
-    }
-    for (int j = 0; j < width1; j++) {
-      if (info->field[i][j] == 1) {
-        std::cout << "1";
-      } else if (info->field[i][j] == 3) {
-        std::cout << "3";
-      } else {
-        std::cout << " ";
-      }
-    }
-    std::cout << "\n";
-  }
-}
-
-#endif
-
 void print_field(State* st) {
   GameInfo_t* info = updateCurrentState();
   WINDOW* win1 = newwin(height1 + 2, width1 + 2, 0, 0);
@@ -66,6 +41,7 @@ void print_field(State* st) {
   }
 
   wrefresh(win1);
-  timeout(1000);
+    timeout(1000);
   delwin(win1);
 }
+

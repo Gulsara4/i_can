@@ -97,9 +97,7 @@ Cell getNextHeadPosition(const Cell &currentHead, char direction) {
 bool isColliding(const Cell &newHead, Snake &my) {
   if (newHead.x < 0 || newHead.x > height1 - 1 || newHead.y < 0 ||
       newHead.y > width1 - 1) {
-#ifdef RUN1
-    std::cout << "/n FAIL border" << newHead.x << " " << newHead.y;
-#endif
+
     return false;
   }
   long long code = encodeCell(newHead.x, newHead.y);
@@ -167,7 +165,10 @@ void processSnakeMove(UserAction_t t) {
   Apple &app = getApple();
   GameInfo_t *info = updateCurrentState();
   int previousDirection = getDirectionBetweenVectors(my.body[0], my.body[1]);
-
+  if ((previousDirection==0 && t==Down) ){t=Up;}
+  else if(previousDirection==1 && t==Up){t=Down;}
+  else if(previousDirection==2 && t==Right){t=Left;}
+  else if(previousDirection==3 && t==Left){t=Right;}
   Cell newHead = getNextHeadPosition(my.body[0], t);
   size_t bodySize = my.body.size();
   #ifdef RUN1
@@ -181,7 +182,7 @@ void processSnakeMove(UserAction_t t) {
     int currentDirection = getDirectionBetweenVectors(newHead, my.body[0]);
 
 
-    my.print_body();
+
     my.advanceHead(currentDirection, previousDirection, newHead);
     if (appleCollision == false) {
       my.updateTail();
@@ -189,15 +190,15 @@ void processSnakeMove(UserAction_t t) {
       my.increase_length_of_snake();
       info->score=my.get_length_of_snake();
       info->level=(int) info->score/20+1;
+      info->speed=1000-(info->level-1)*100;
     }
 
     my.print_body();
     resetField();
     fillField(my, app);
-    print_field();
+    
   } else {
-    State *st = whichState();
-    *st = (State_terminate);
+    userInput(Terminate, false);
   }
 }
 
