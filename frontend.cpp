@@ -25,13 +25,19 @@ void print_field() {
 
 #endif
 
-void print_field(State* st) {
+void print_field(State* st, WINDOW* win1, WINDOW* win2 ) {
   GameInfo_t* info = updateCurrentState();
-  WINDOW* win1 = newwin(height1 + 2, width1 + 2, 0, 0);
-  box(win1, 0, 0);
-  if (*st == State_start) {
+   printw(  "Game Snake ))) %d", *st);
+
+    werase(win1);
+    werase(win2);
+   box(win1, 0, 0);
+   if (*st == State_start) {
+     printw(  "Game Snake ))qqq) %d", *st);
     mvwprintw(win1, 1, 1, "Game Snake )))");
+    timeout(1000);
     mvwprintw(win1, 2, 1, "Press o to start ");
+   
   } else if (*st == State_move) {
     for (int i = 0; i < height1; i++) {
       for (int j = 0; j < width1; j++) {
@@ -46,7 +52,7 @@ void print_field(State* st) {
       std::cout << "\n";
     }
 
-    WINDOW* win2 = newwin(5, 14, 0, width1 + 2);
+   
     box(win2, 0, 0);
     std::string msg = "Score";
     int y = 1;
@@ -55,7 +61,7 @@ void print_field(State* st) {
     mvwprintw(win2, 3, x, "%s %d", "Level", info->level);
     wrefresh(win2);
 
-    delwin(win2);
+    
   } else if (*st == State_terminate) {
     mvwprintw(win1, 1, 1, "Game over");
 
@@ -67,5 +73,6 @@ void print_field(State* st) {
 
   wrefresh(win1);
   
-  delwin(win1);
+
+  
 }

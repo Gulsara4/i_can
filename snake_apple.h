@@ -12,7 +12,7 @@ extern GameInfo_t currentGameState;
 extern State currentMachineState; 
 
 
-void print_field(State* st);
+void print_field(State* st, WINDOW* win1, WINDOW* win2);
 void resetField();
 void resetDynamicField(int a);
 
