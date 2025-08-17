@@ -45,7 +45,8 @@ void initialization(){
   app.relocate(snake);
   fillField(snake, app);
   info->score=snake.get_length_of_snake();
-  info->speed = 0;
+  info->level = 1;
+  info->speed = 1000;
 }
 
 
@@ -55,27 +56,29 @@ void userInput(UserAction_t action, bool hold){
 
     if (action==Pause){
       *st=(State_pause);
-        
+        nodelay(stdscr, false);
     }
     else if(action==Terminate){     
       *st=(State_terminate);
       resetDynamicField(1);
-       
+       nodelay(stdscr, false);
        
     }
     else if( action==Start){
       *st=(State_start);
       initialization();
-
+      nodelay(stdscr, false);
+      *st=(State_move);
       
     }
     else if (action==Up || action==Down || action==Left || action==Right)
     {
       *st=(State_move);
       processSnakeMove(action);
+      nodelay(stdscr, true);
   
     }
-    else if(action==ERR){
+    else if(action==ERR && *st==State_move){
       Snake &my = getSnake();
       int previousDirection = getDirectionBetweenVectors(my.body[0], my.body[1]);
       if (previousDirection==0){action=Up;}
@@ -83,6 +86,7 @@ void userInput(UserAction_t action, bool hold){
       else if(previousDirection==2){action=Left;}
       else if(previousDirection==3){action=Right;}
       processSnakeMove(action);
+       nodelay(stdscr, true);
       
       
      

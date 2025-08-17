@@ -27,16 +27,15 @@ void print_field() {
 
 void print_field(State* st, WINDOW* win1, WINDOW* win2 ) {
   GameInfo_t* info = updateCurrentState();
-   printw(  "Game Snake ))) %d", *st);
-
+   refresh();
     werase(win1);
     werase(win2);
    box(win1, 0, 0);
    if (*st == State_start) {
-     printw(  "Game Snake ))qqq) %d", *st);
+  
     mvwprintw(win1, 1, 1, "Game Snake )))");
-    timeout(1000);
-    mvwprintw(win1, 2, 1, "Press o to start ");
+
+    mvwprintw(win1, 2, 1, "Press  to g start ");
    
   } else if (*st == State_move) {
     for (int i = 0; i < height1; i++) {
@@ -59,7 +58,7 @@ void print_field(State* st, WINDOW* win1, WINDOW* win2 ) {
     int x = 2;
     mvwprintw(win2, y, x, "%s %d", msg.c_str(), info->score);
     mvwprintw(win2, 3, x, "%s %d", "Level", info->level);
-    wrefresh(win2);
+   
 
     
   } else if (*st == State_terminate) {
@@ -67,12 +66,14 @@ void print_field(State* st, WINDOW* win1, WINDOW* win2 ) {
 
   } else if (*st == State_pause) {
     mvwprintw(win1, 1, 1, "Pause");
+    mvwprintw(win1, 2, 1, "Press");
+    mvwprintw(win1, 3, 1, " Up, Down, Left, Right");
   } else {
     mvwprintw(win1, 1, 1, "WIN ERROR");
   }
 
   wrefresh(win1);
-  
+   wrefresh(win2);
 
   
 }
