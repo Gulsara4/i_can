@@ -1,4 +1,5 @@
 #include "common_structure.h"
+
 #include <iostream>
 GameInfo_t currentGameState;
 State currentMachineState;
@@ -7,7 +8,7 @@ GameInfo_t* updateCurrentState() {
   return &params;
 }
 
-State* whichState(){
+State* whichState() {
   static State params;
   return &params;
 }

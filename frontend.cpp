@@ -1,6 +1,6 @@
 #include "common_structure.h"
 #include "snake_apple.h"
-// Глобальные указатели на окна
+
 
 #ifdef RUN1
 void print_field() {
@@ -25,18 +25,17 @@ void print_field() {
 
 #endif
 
-void print_field(State* st, WINDOW* win1, WINDOW* win2 ) {
+void print_field(State* st, WINDOW* win1, WINDOW* win2) {
   GameInfo_t* info = updateCurrentState();
-   refresh();
-    werase(win1);
-    werase(win2);
-   box(win1, 0, 0);
-   if (*st == State_start) {
-  
+  refresh();
+  werase(win1);
+  werase(win2);
+  box(win1, 0, 0);
+  if (*st == State_start) {
     mvwprintw(win1, 1, 1, "Game Snake )))");
 
-    mvwprintw(win1, 2, 1, "Press  to g start ");
-   
+    mvwprintw(win1, 2, 1, "Press s to start ");
+
   } else if (*st == State_move) {
     for (int i = 0; i < height1; i++) {
       for (int j = 0; j < width1; j++) {
@@ -51,16 +50,13 @@ void print_field(State* st, WINDOW* win1, WINDOW* win2 ) {
       std::cout << "\n";
     }
 
-   
     box(win2, 0, 0);
     std::string msg = "Score";
     int y = 1;
     int x = 2;
     mvwprintw(win2, y, x, "%s %d", msg.c_str(), info->score);
     mvwprintw(win2, 3, x, "%s %d", "Level", info->level);
-   
 
-    
   } else if (*st == State_terminate) {
     mvwprintw(win1, 1, 1, "Game over");
 
@@ -73,7 +69,5 @@ void print_field(State* st, WINDOW* win1, WINDOW* win2 ) {
   }
 
   wrefresh(win1);
-   wrefresh(win2);
-
-  
+  wrefresh(win2);
 }

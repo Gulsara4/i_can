@@ -10,17 +10,17 @@ int Apple::getY() const { return y; }
 
 void Apple::relocate(Snake &my_snake) {
   auto occ = getOccupiedCells(my_snake);
-  static std::random_device rd;   // случайное начальное зерно
-  static std::mt19937 gen(rd());  // генератор Mersenne Twister
-  std::uniform_int_distribution<int> distX(0, width1 - 1);   // ширина поля
+  static std::random_device rd;  
+  static std::mt19937 gen(rd());  
+  std::uniform_int_distribution<int> distX(0, width1 - 1);  // ширина поля
   std::uniform_int_distribution<int> distY(0, height1 - 1);  // высота поля
   do {
     x = rand() % height1;
     y = rand() % width1;
 
   } while (occ.count((static_cast<long long>(x) << 32) | (unsigned int)y));
-  #ifdef RUN1
-std::cout << "RELOCATE" << app.getX() << " " << app.getY() << "\n";
+#ifdef RUN1
+  std::cout << "RELOCATE" << app.getX() << " " << app.getY() << "\n";
 #endif
 }
 int getDirectionBetweenVectors(Cell one, Cell two) {
@@ -96,8 +96,8 @@ Cell getNextHeadPosition(const Cell &currentHead, char direction) {
 
 bool isColliding(const Cell &newHead, Snake &my) {
   if (newHead.x < 0 || newHead.x > height1 - 1 || newHead.y < 0 ||
-      newHead.y > width1 - 1) {
-
+      newHead.y > width1 - 1) 
+      {
     return false;
   }
   long long code = encodeCell(newHead.x, newHead.y);
@@ -125,7 +125,7 @@ void Snake::advanceHead(int currentDirection, int previousDirection,
   if (previousDirection != currentDirection)  // добавляем вектор
   {
     addVector(newHead);
-  } else {  // продолжаем двигаться (голова)
+  } else {  
 
     if (currentDirection == 0)
       body[0].x -= 1;
@@ -165,13 +165,18 @@ void processSnakeMove(UserAction_t t) {
   Apple &app = getApple();
   GameInfo_t *info = updateCurrentState();
   int previousDirection = getDirectionBetweenVectors(my.body[0], my.body[1]);
-  if ((previousDirection==0 && t==Down) ){t=Up;}
-  else if(previousDirection==1 && t==Up){t=Down;}
-  else if(previousDirection==2 && t==Right){t=Left;}
-  else if(previousDirection==3 && t==Left){t=Right;}
+  if ((previousDirection == 0 && t == Down)) {
+    t = Up;
+  } else if (previousDirection == 1 && t == Up) {
+    t = Down;
+  } else if (previousDirection == 2 && t == Right) {
+    t = Left;
+  } else if (previousDirection == 3 && t == Left) {
+    t = Right;
+  }
   Cell newHead = getNextHeadPosition(my.body[0], t);
   size_t bodySize = my.body.size();
-  #ifdef RUN1
+#ifdef RUN1
   std::cout << "\n Head pre " << my.body[0].x << " " << my.body[0].y << "  "
             << my.body.size() << "\n";
   std::cout << "\n Tail" << my.body[bodySize - 1].x << " "
@@ -181,22 +186,25 @@ void processSnakeMove(UserAction_t t) {
     bool appleCollision = checkAppleCollision(my, app, newHead);
     int currentDirection = getDirectionBetweenVectors(newHead, my.body[0]);
 
-
-
     my.advanceHead(currentDirection, previousDirection, newHead);
     if (appleCollision == false) {
       my.updateTail();
-    }else{
+    } else {
       my.increase_length_of_snake();
-      info->score=my.get_length_of_snake();
-      info->level=(int) info->score/20+1;
-      info->speed=1000-(info->level-1)*100;
+      info->score = my.get_length_of_snake();
+      if (info->score>info->high_score){
+        info->high_score = info->score;
+        play_w_file("w", info->high_score);
+      }
+      info->level = (int)info->score / 20 + 1;
+      info->speed = 1000 - (info->level - 1) * 100;
+
     }
 
     my.print_body();
     resetField();
     fillField(my, app);
-    
+
   } else {
     userInput(Terminate, false);
   }
@@ -204,3 +212,19 @@ void processSnakeMove(UserAction_t t) {
 
 size_t Snake::get_length_of_snake() const { return length_of_snake; }
 void Snake::increase_length_of_snake() { length_of_snake++; }
+int play_w_file(const char* opt, int score) {
+    int res = 0;
+    FILE* fp = fopen("highscore.txt", opt);
+    char str[100];
+    if (strcmp(opt, "r") == 0 && fp) {
+        fgets(str, 100, fp);
+        res = atoi(str);
+
+    } else if (strcmp(opt, "w") == 0 && fp) {
+        snprintf(str, sizeof(str), "%d", score);
+        fputs(str, fp);
+    }
+    if (fp) fclose(fp);
+
+    return res;
+}
