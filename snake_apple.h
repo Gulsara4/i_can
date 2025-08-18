@@ -8,14 +8,9 @@
 #include <unordered_set>
 #include <vector>
 #include <fstream>
-#include "common_structure.h"
 
-extern GameInfo_t currentGameState;
-extern State currentMachineState;
-int play_w_file(const char* opt, int score);
-void print_field(State* st, WINDOW* win1, WINDOW* win2);
-void resetField();
-void resetDynamicField(int a);
+
+
 
 struct Cell {
   int x;
@@ -49,14 +44,7 @@ class Apple {
   int getY() const;
   void relocate(Snake& my_snake);
 };
-void processSnakeMove(UserAction_t t);
-void fillField(Snake& snake, const Apple& app);
-inline long long encodeCell(int x, int y);
-bool isColliding(const Cell& newHead, Snake& my);
-std::unordered_set<long long> getOccupiedCells(Snake& my);
-bool checkAppleCollision(Snake& snake, Apple& apple, const Cell& newHead);
 
-int getDirectionBetweenVectors(Cell one, Cell two);
 static Snake my_snake({{5, 5}, {8, 5}});
 static Apple app(0, 0);
 Snake& getSnake();

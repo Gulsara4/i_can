@@ -1,5 +1,6 @@
-#include "common_structure.h"
-#include "snake_apple.h"
+// #include "common_structure.h"
+// #include "snake_apple.h"
+#include "snake.h"
 
 void resetField() {
   GameInfo_t* info = updateCurrentState();
@@ -35,19 +36,6 @@ void resetDynamicField(int a) {
     }
     free(info->field);
   }
-}
-void initialization() {
-  Snake& snake = getSnake();
-  Apple& app = getApple();
-  State* st = whichState();
-  GameInfo_t* info = updateCurrentState();
-  resetDynamicField(0);
-  app.relocate(snake);
-  fillField(snake, app);
-  info->score = snake.get_length_of_snake();
-  info->high_score= play_w_file("r", 0);
-  info->level = 1;
-  info->speed = 1000;
 }
 
 void userInput(UserAction_t action, bool hold) {

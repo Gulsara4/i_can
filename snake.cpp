@@ -1,28 +1,19 @@
-#include "common_structure.h"
-#include "snake_apple.h"
+// #include "common_structure.h"
+// #include "snake_apple.h"
+#include "snake.h"
+GameInfo_t currentGameState;
+State currentMachineState;
 
-Snake &getSnake() { return my_snake; }
-Apple &getApple() { return app; }
-Apple::Apple(int x, int y) : x(x), y(y) {}
-
-int Apple::getX() const { return x; }
-int Apple::getY() const { return y; }
-
-void Apple::relocate(Snake &my_snake) {
-  auto occ = getOccupiedCells(my_snake);
-  static std::random_device rd;  
-  static std::mt19937 gen(rd());  
-  std::uniform_int_distribution<int> distX(0, width1 - 1);  // ширина поля
-  std::uniform_int_distribution<int> distY(0, height1 - 1);  // высота поля
-  do {
-    x = rand() % height1;
-    y = rand() % width1;
-
-  } while (occ.count((static_cast<long long>(x) << 32) | (unsigned int)y));
-#ifdef RUN1
-  std::cout << "RELOCATE" << app.getX() << " " << app.getY() << "\n";
-#endif
+GameInfo_t* updateCurrentState() {
+  static GameInfo_t params;
+  return &params;
 }
+
+State* whichState() {
+  static State params;
+  return &params;
+}
+
 int getDirectionBetweenVectors(Cell one, Cell two) {
   int result = -1;
   if (one.y == two.y) {
@@ -39,12 +30,10 @@ int getDirectionBetweenVectors(Cell one, Cell two) {
   }
   return result;
 }
-// Определение конструктора вне класса
-Snake::Snake(const std::vector<Cell> &cells) : body(cells) {
-  length_of_snake = getOccupiedCells(*this).size();
-}
+
+
 inline long long encodeCell(
-    int x, int y)  // long long code = encodeCell(newHead.x, newHead.y);
+    int x, int y)  
 {
   return (static_cast<long long>(x) << 32) | (static_cast<unsigned int>(y));
 }
@@ -72,19 +61,7 @@ std::unordered_set<long long> getOccupiedCells(Snake &my) {
   return occupied;
 }
 
-void Snake::print_body() {
-#ifdef RUN1
-  std::cout << "\nBODY ";
-  for (const auto &elem : body) std::cout << elem.x << ' ' << elem.y << ' ';
-  std::cout << "BODY \n";
-#endif
-}
 
-void Snake::addVector(Cell new1) {
-  std::vector<Cell> copy = {new1};
-  copy.insert(copy.end(), body.begin(), body.end());
-  body = copy;
-}
 Cell getNextHeadPosition(const Cell &currentHead, char direction) {
   Cell newHead = currentHead;
   if (direction == Left) newHead.y -= 1;
@@ -120,46 +97,7 @@ bool checkAppleCollision(Snake &snake, Apple &apple, const Cell &newHead) {
   }
   return false;
 }
-void Snake::advanceHead(int currentDirection, int previousDirection,
-                        Cell &newHead) {
-  if (previousDirection != currentDirection)  // добавляем вектор
-  {
-    addVector(newHead);
-  } else {  
 
-    if (currentDirection == 0)
-      body[0].x -= 1;
-
-    else if (currentDirection == 1)
-      body[0].x += 1;
-
-    else if (currentDirection == 2)
-      body[0].y -= 1;
-
-    else if (currentDirection == 3)
-      body[0].y += 1;
-  }
-}
-void Snake::updateTail() {
-  size_t bodySize = body.size();  // убираем посл клетку или переносим
-  if (abs(body[bodySize - 2].x - body[bodySize - 1].x) +
-          abs(body[bodySize - 2].y - body[bodySize - 1].y) ==
-      1) {
-    body.pop_back();
-  } else {
-    int currentDirection =
-        getDirectionBetweenVectors(body[bodySize - 2], body[bodySize - 1]);
-    if (currentDirection == 0) {
-      body[bodySize - 1].x -= 1;
-    } else if (currentDirection == 1) {
-      body[bodySize - 1].x += 1;
-    } else if (currentDirection == 2) {
-      body[bodySize - 1].y -= 1;
-    } else if (currentDirection == 3) {
-      body[bodySize - 1].y += 1;
-    }
-  }
-}
 void processSnakeMove(UserAction_t t) {
   Snake &my = getSnake();
   Apple &app = getApple();
@@ -210,8 +148,19 @@ void processSnakeMove(UserAction_t t) {
   }
 }
 
-size_t Snake::get_length_of_snake() const { return length_of_snake; }
-void Snake::increase_length_of_snake() { length_of_snake++; }
+void initialization() {
+  Snake& snake = getSnake();
+  Apple& app = getApple();
+  State* st = whichState();
+  GameInfo_t* info = updateCurrentState();
+  resetDynamicField(0);
+  app.relocate(snake);
+  fillField(snake, app);
+  info->score = snake.get_length_of_snake();
+  info->high_score= play_w_file("r", 0);
+  info->level = 1;
+  info->speed = 1000;
+}
 int play_w_file(const char* opt, int score) {
     int res = 0;
     FILE* fp = fopen("highscore.txt", opt);

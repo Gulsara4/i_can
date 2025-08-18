@@ -5,9 +5,9 @@ clang:
 push:
 	make clean 
 	git add .
-	git commit -m "highscore ++"
-	git push origin master
+	git commit -m "немнго чистки "
+	git push 
 go:
 	g++ common_structure.cpp common_structure.h snake_apple.h functions_of_fields.cpp main.cpp snake.cpp frontend.cpp -DRUN1
 god:
-	g++ common_structure.cpp common_structure.h snake_apple.h functions_of_fields.cpp main.cpp snake.cpp frontend.cpp -lncurses -DRUN2
+	g++ snake.h apple.cpp snake1.cpp   snake_apple.h functions_of_fields.cpp main.cpp snake.cpp frontend.cpp -lncurses -DRUN2

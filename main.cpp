@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include "common_structure.h"
-#include "snake_apple.h"
-
+// #include "common_structure.h"
+// #include "snake_apple.h"
+#include "snake.h"
 int main() {
   initscr();
   cbreak();

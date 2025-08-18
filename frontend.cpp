@@ -1,29 +1,7 @@
-#include "common_structure.h"
-#include "snake_apple.h"
 
-
-#ifdef RUN1
-void print_field() {
-  GameInfo_t* info = updateCurrentState();
-  for (int i = 0; i < height1; i++) {
-    std::cout << i << " ";
-    if (i < 10) {
-      std::cout << " ";
-    }
-    for (int j = 0; j < width1; j++) {
-      if (info->field[i][j] == 1) {
-        std::cout << "1";
-      } else if (info->field[i][j] == 3) {
-        std::cout << "3";
-      } else {
-        std::cout << " ";
-      }
-    }
-    std::cout << "\n";
-  }
-}
-
-#endif
+// #include "common_structure.h"
+// #include "snake_apple.h"
+#include "snake.h"
 
 void print_field(State* st, WINDOW* win1, WINDOW* win2) {
   GameInfo_t* info = updateCurrentState();
