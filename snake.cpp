@@ -1,5 +1,4 @@
-// #include "common_structure.h"
-// #include "snake_apple.h"
+
 #include "snake.h"
 GameInfo_t currentGameState;
 State currentMachineState;
@@ -42,7 +41,7 @@ std::unordered_set<long long> getOccupiedCells(Snake &my) {
   for (const auto &cell : my.body) {
     occupied.insert(encodeCell(cell.x, cell.y));
   }
-  size_t l = my.body.size();
+  int l = my.body.size();
   for (int i = 0; i < l - 1; i++) {
     int currentDirection =
         getDirectionBetweenVectors(my.body[i], my.body[i + 1]);
@@ -90,12 +89,12 @@ bool isColliding(const Cell &newHead, Snake &my) {
   return true;
 }
 bool checkAppleCollision(Snake &snake, Apple &apple, const Cell &newHead) {
+  bool flag=false;
   if (newHead.x == apple.getX() && newHead.y == apple.getY()) {
     apple.relocate(snake);
-
-    return true;  // съели яблоко
+    flag=true;  // съели яблоко
   }
-  return false;
+  return flag;
 }
 
 void processSnakeMove(UserAction_t t) {
@@ -113,7 +112,7 @@ void processSnakeMove(UserAction_t t) {
     t = Right;
   }
   Cell newHead = getNextHeadPosition(my.body[0], t);
-  size_t bodySize = my.body.size();
+  
 #ifdef RUN1
   std::cout << "\n Head pre " << my.body[0].x << " " << my.body[0].y << "  "
             << my.body.size() << "\n";
@@ -144,14 +143,14 @@ void processSnakeMove(UserAction_t t) {
     fillField(my, app);
 
   } else {
-    userInput(Terminate, false);
+    userInput(Terminate);
   }
 }
 
 void initialization() {
   Snake& snake = getSnake();
   Apple& app = getApple();
-  State* st = whichState();
+  
   GameInfo_t* info = updateCurrentState();
   resetDynamicField(0);
   app.relocate(snake);

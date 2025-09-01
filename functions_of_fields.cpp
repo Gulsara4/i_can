@@ -38,21 +38,23 @@ void resetDynamicField(int a) {
   }
 }
 
-void userInput(UserAction_t action, bool hold) {
+void userInput(UserAction_t action) {
   State* st = whichState();
 
-  if (action == Pause) {
+  if (action == Pause && *st==State_move) {
     *st = (State_pause);
     nodelay(stdscr, false);
   } else if (action == Terminate) {
+    nodelay(stdscr, false);
     *st = (State_terminate);
     resetDynamicField(1);
-    nodelay(stdscr, false);
+    
 
   } else if (action == Start) {
+    nodelay(stdscr, false);
     *st = (State_start);
     initialization();
-    nodelay(stdscr, false);
+    
     *st = (State_move);
 
   } else if (action == Up || action == Down || action == Left ||

@@ -13,10 +13,10 @@ typedef enum {
   Start = 'g',
   Pause = 'p',
   Terminate = 'q',
-  Left = 'a', //KEY_LEFT,
-  Right ='d',// KEY_RIGHT,
-  Up = 'w', //KEY_UP,
-  Down = 's',// KEY_DOWN,
+  Left = 'a', 
+  Right ='d',
+  Up = 'w', 
+  Down = 's',
   Action
 } UserAction_t;
 
@@ -38,15 +38,12 @@ typedef enum {
 
 } State;
 
-void userInput(UserAction_t action, bool hold);
-GameInfo_t* updateCurrentState();
-
-State* whichState();
-
-
-
 extern GameInfo_t currentGameState;
 extern State currentMachineState; 
+
+void userInput(UserAction_t action);
+GameInfo_t* updateCurrentState();
+State* whichState();
 
 
 void processSnakeMove(UserAction_t t);
