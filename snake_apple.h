@@ -1,5 +1,6 @@
 #ifndef HEADER_3_H
 #define HEADER_3_H
+
 #include <ncurses/ncurses.h>
 
 #include <cmath>
@@ -40,9 +41,10 @@ class Apple {
 
  public:
   Apple(int x, int y);
-  int getX() const;
-  int getY() const;
-  void relocate(Snake& my_snake);
+  virtual int getX() const;
+  virtual int getY() const;
+  virtual void relocate(Snake& my_snake);
+  virtual ~Apple() = default;
 };
 
 static Snake my_snake({{5, 5}, {8, 5}});

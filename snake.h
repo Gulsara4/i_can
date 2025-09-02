@@ -1,7 +1,7 @@
 #include "snake_apple.h"
 
 
-#include <ncurses/ncurses.h>
+//#include <ncurses/ncurses.h>
 #include <string>
 #include <cstring>
 #define height1 20
@@ -44,7 +44,7 @@ extern State currentMachineState;
 void userInput(UserAction_t action);
 GameInfo_t* updateCurrentState();
 State* whichState();
-
+bool isValid(UserAction_t a);
 
 void processSnakeMove(UserAction_t t);
 bool isColliding(const Cell& newHead, Snake& my);
@@ -52,7 +52,7 @@ bool checkAppleCollision(Snake& snake, Apple& apple, const Cell& newHead);
 inline long long encodeCell(int x, int y);
 std::unordered_set<long long> getOccupiedCells(Snake& my);
 int getDirectionBetweenVectors(Cell one, Cell two);
-
+Cell getNextHeadPosition(const Cell &currentHead, char direction);
 void initialization();
 int play_w_file(const char* opt, int score);
 

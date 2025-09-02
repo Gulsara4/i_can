@@ -112,17 +112,10 @@ void processSnakeMove(UserAction_t t) {
     t = Right;
   }
   Cell newHead = getNextHeadPosition(my.body[0], t);
-  
-#ifdef RUN1
-  std::cout << "\n Head pre " << my.body[0].x << " " << my.body[0].y << "  "
-            << my.body.size() << "\n";
-  std::cout << "\n Tail" << my.body[bodySize - 1].x << " "
-            << my.body[bodySize - 1].y << "\n";
-#endif
+
   if (isColliding(newHead, my) == true) {
     bool appleCollision = checkAppleCollision(my, app, newHead);
     int currentDirection = getDirectionBetweenVectors(newHead, my.body[0]);
-
     my.advanceHead(currentDirection, previousDirection, newHead);
     if (appleCollision == false) {
       my.updateTail();
@@ -138,7 +131,6 @@ void processSnakeMove(UserAction_t t) {
 
     }
 
-    my.print_body();
     resetField();
     fillField(my, app);
 
@@ -162,7 +154,7 @@ void initialization() {
 }
 int play_w_file(const char* opt, int score) {
     int res = 0;
-    FILE* fp = fopen("highscore.txt", opt);
+    FILE* fp = fopen("highscore_snake.txt", opt);
     char str[100];
     if (strcmp(opt, "r") == 0 && fp) {
         fgets(str, 100, fp);

@@ -13,7 +13,7 @@ void resetField() {
   }
 }
 
-void fillField(Snake& snake, const Apple& app) {  //гдя яблоки и змея
+void fillField(Snake& snake, const Apple& app) {  // гдя яблоки и змея
   GameInfo_t* info = updateCurrentState();
   auto occupied = getOccupiedCells(snake);
   for (long long code : occupied) {
@@ -26,9 +26,9 @@ void fillField(Snake& snake, const Apple& app) {  //гдя яблоки и зм�
 void resetDynamicField(int a) {
   GameInfo_t* info = updateCurrentState();
   if (a == 0) {  //
-    info->field = (int**)calloc(sizeof(int*), (size_t)height1);
+    info->field = (int**)calloc((size_t)height1, sizeof(int*));
     for (int i = 0; i < height1; i++) {
-      info->field[i] = (int*)calloc(sizeof(int), (size_t)width1);
+      info->field[i] = (int*)calloc((size_t)width1, sizeof(int));
     }
   } else if (a == 1) {
     for (int i = 0; i < height1; i++) {
@@ -37,33 +37,31 @@ void resetDynamicField(int a) {
     free(info->field);
   }
 }
+bool isValid(UserAction_t a) {
+  if (a == Up || a == Down || a == Left || a == Right || a == Pause ||
+      a == Terminate || a == Start) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 void userInput(UserAction_t action) {
   State* st = whichState();
-
-  if (action == Pause && *st==State_move) {
+  if (action == Pause && *st == State_move) {
     *st = (State_pause);
-    nodelay(stdscr, false);
   } else if (action == Terminate) {
-    nodelay(stdscr, false);
     *st = (State_terminate);
     resetDynamicField(1);
-    
-
-  } else if (action == Start) {
-    nodelay(stdscr, false);
-    *st = (State_start);
+  } else if (action == Start && *st == State_start) {
     initialization();
-    
     *st = (State_move);
-
   } else if (action == Up || action == Down || action == Left ||
              action == Right) {
     *st = (State_move);
     processSnakeMove(action);
-    nodelay(stdscr, true);
-
-  } else if (action == ERR && *st == State_move) {
+  } else if ((action == ERR && *st == State_move) ||
+             (isValid(action) == false)) {
     Snake& my = getSnake();
     int previousDirection = getDirectionBetweenVectors(my.body[0], my.body[1]);
     if (previousDirection == 0) {
@@ -76,6 +74,15 @@ void userInput(UserAction_t action) {
       action = Right;
     }
     processSnakeMove(action);
+  }
+#ifdef NOT_TEST
+  if ((action == Pause && *st == State_move) || (action == Terminate) ||
+      (action == Start)) {
+    nodelay(stdscr, false);
+  } else if ((action == Up || action == Down || action == Left ||
+              action == Right) ||
+             (action == ERR && *st == State_move)) {
     nodelay(stdscr, true);
   }
+#endif
 }

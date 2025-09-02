@@ -1,7 +1,5 @@
 #include <iostream>
 
-// #include "common_structure.h"
-// #include "snake_apple.h"
 #include "snake.h"
 int main() {
   
@@ -27,7 +25,9 @@ int main() {
     if (*st == State_move) {
       timeout(info->speed);
     }
+
     print_field(st, win1, win2);
+
     ch = getch();
   }
   getch();
